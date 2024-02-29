@@ -1,0 +1,187 @@
+-- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
+--
+-- Host: localhost    Database: db_libro_expres
+-- ------------------------------------------------------
+-- Server version	10.4.32-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `tb_clientes`
+--
+
+DROP TABLE IF EXISTS `tb_clientes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_clientes` (
+  `id_cliente` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_cliente` varchar(50) NOT NULL,
+  `email_cliente` varchar(100) NOT NULL,
+  `telefono` varchar(10) NOT NULL,
+  PRIMARY KEY (`id_cliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_clientes`
+--
+
+LOCK TABLES `tb_clientes` WRITE;
+/*!40000 ALTER TABLE `tb_clientes` DISABLE KEYS */;
+INSERT INTO `tb_clientes` VALUES (1,'Juan Pérez','juan@example.com','1234567890'),(2,'María López','maria@example.com','0987654321'),(3,'Pedro García','pedro@example.com','5555555555'),(4,'Laura Martínez','laura@example.com','7777777777'),(5,'Carlos Rodríguez','carlos@example.com','9999999999'),(6,'Ana González','ana@example.com','1111111111'),(7,'David Sánchez','david@example.com','2222222222'),(8,'Paula Fernández','paula@example.com','3333333333'),(9,'Diego Pérez','diego@example.com','4444444444'),(10,'Lucía Martín','lucia@example.com','6666666666'),(11,'Sofía García','sofia@example.com','8888888888'),(12,'Mario López','mario@example.com','1010101010'),(13,'Elena Rodríguez','elena@example.com','1212121212'),(14,'Javier Pérez','javier@example.com','1313131313'),(15,'Silvia Martínez','silvia@example.com','1414141414'),(16,'Alejandro García','alejandro@example.com','1515151515'),(17,'Carmen González','carmen@example.com','1616161616'),(18,'Pablo Sánchez','pablo@example.com','1717171717'),(19,'Isabel Fernández','isabel@example.com','1818181818'),(20,'Natalia Pérez','natalia@example.com','1919191919');
+/*!40000 ALTER TABLE `tb_clientes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_detalles_pedidos`
+--
+
+DROP TABLE IF EXISTS `tb_detalles_pedidos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_detalles_pedidos` (
+  `id_detalle_prestamo` int(11) NOT NULL AUTO_INCREMENT,
+  `id_prestamo` int(11) DEFAULT NULL,
+  `id_libro` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_detalle_prestamo`),
+  KEY `id_prestamo` (`id_prestamo`),
+  KEY `id_libro` (`id_libro`),
+  CONSTRAINT `tb_detalles_pedidos_ibfk_1` FOREIGN KEY (`id_prestamo`) REFERENCES `tb_prestamos` (`id_prestamo`),
+  CONSTRAINT `tb_detalles_pedidos_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `tb_libros` (`id_libro`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_detalles_pedidos`
+--
+
+LOCK TABLES `tb_detalles_pedidos` WRITE;
+/*!40000 ALTER TABLE `tb_detalles_pedidos` DISABLE KEYS */;
+INSERT INTO `tb_detalles_pedidos` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5),(6,6,6),(7,7,7),(8,8,8),(9,9,9),(10,10,10),(11,11,11),(12,12,12),(13,13,13),(14,14,14),(15,15,15),(16,16,16),(17,17,17),(18,18,18),(19,19,19),(20,20,20);
+/*!40000 ALTER TABLE `tb_detalles_pedidos` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER actualizar_estado_libro
+AFTER INSERT ON tb_detalles_pedidos
+FOR EACH ROW
+BEGIN
+    UPDATE tb_libros
+    SET estado = 'Prestado'
+    WHERE id_libro = NEW.id_libro;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `tb_generos_libros`
+--
+
+DROP TABLE IF EXISTS `tb_generos_libros`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_generos_libros` (
+  `id_genero_libro` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_genero_libro` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_genero_libro`),
+  UNIQUE KEY `nombre_genero_libro` (`nombre_genero_libro`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_generos_libros`
+--
+
+LOCK TABLES `tb_generos_libros` WRITE;
+/*!40000 ALTER TABLE `tb_generos_libros` DISABLE KEYS */;
+INSERT INTO `tb_generos_libros` VALUES (14,'Arte'),(12,'Autoayuda'),(10,'Aventura'),(8,'Biografía'),(4,'Ciencia ficción'),(16,'Cocina'),(20,'Deporte'),(15,'Economía'),(3,'Fantasía'),(1,'Ficción'),(9,'Historia'),(19,'Humor'),(11,'Infantil'),(5,'Misterio'),(2,'No ficción'),(13,'Política'),(18,'Religión'),(7,'Romance'),(6,'Terror'),(17,'Viajes');
+/*!40000 ALTER TABLE `tb_generos_libros` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_libros`
+--
+
+DROP TABLE IF EXISTS `tb_libros`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_libros` (
+  `id_libro` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo_libro` varchar(50) DEFAULT NULL,
+  `anio_libro` int(11) DEFAULT NULL,
+  `id_genero_libro` int(11) DEFAULT NULL,
+  `estado` enum('Disponible','Prestado') NOT NULL,
+  PRIMARY KEY (`id_libro`),
+  KEY `id_genero_libro` (`id_genero_libro`),
+  CONSTRAINT `tb_libros_ibfk_1` FOREIGN KEY (`id_genero_libro`) REFERENCES `tb_generos_libros` (`id_genero_libro`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_libros`
+--
+
+LOCK TABLES `tb_libros` WRITE;
+/*!40000 ALTER TABLE `tb_libros` DISABLE KEYS */;
+INSERT INTO `tb_libros` VALUES (1,'El señor de los anillos',1954,3,'Disponible'),(2,'Cien años de soledad',1967,1,'Disponible'),(3,'Harry Potter y la piedra filosofal',1997,3,'Disponible'),(4,'1984',1949,4,'Disponible'),(5,'El código Da Vinci',2003,2,'Disponible'),(6,'Orgullo y prejuicio',1813,6,'Disponible'),(7,'Drácula',1897,5,'Disponible'),(8,'El hobbit',1937,3,'Disponible'),(9,'El alquimista',1988,10,'Disponible'),(10,'Juego de tronos',1996,3,'Disponible'),(11,'La sombra del viento',2001,6,'Disponible'),(12,'Don Quijote de la Mancha',1605,8,'Disponible'),(13,'El principito',1943,11,'Disponible'),(14,'Mujercitas',1868,1,'Disponible'),(15,'El perfume',1985,5,'Disponible'),(16,'El guardián entre el centeno',1951,1,'Disponible'),(17,'Los pilares de la Tierra',1989,9,'Disponible'),(18,'Rebelión en la granja',1945,1,'Disponible'),(19,'La catedral del mar',2006,9,'Disponible'),(20,'La ciudad y los perros',1963,1,'Disponible');
+/*!40000 ALTER TABLE `tb_libros` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_prestamos`
+--
+
+DROP TABLE IF EXISTS `tb_prestamos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_prestamos` (
+  `id_prestamo` int(11) NOT NULL AUTO_INCREMENT,
+  `id_cliente` int(11) DEFAULT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_devolucion` date NOT NULL,
+  `estado` enum('Activo','Inactivo') DEFAULT NULL,
+  PRIMARY KEY (`id_prestamo`),
+  KEY `id_cliente` (`id_cliente`),
+  CONSTRAINT `tb_prestamos_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `tb_clientes` (`id_cliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_prestamos`
+--
+
+LOCK TABLES `tb_prestamos` WRITE;
+/*!40000 ALTER TABLE `tb_prestamos` DISABLE KEYS */;
+INSERT INTO `tb_prestamos` VALUES (1,1,'2024-02-01','2024-02-15','Activo'),(2,2,'2024-02-03','2024-02-17','Activo'),(3,3,'2024-02-05','2024-02-19','Activo'),(4,4,'2024-02-07','2024-02-21','Activo'),(5,5,'2024-02-09','2024-02-23','Activo'),(6,6,'2024-02-11','2024-02-25','Activo'),(7,7,'2024-02-13','2024-02-27','Activo'),(8,8,'2024-02-15','2024-03-02','Activo'),(9,9,'2024-02-17','2024-03-04','Activo'),(10,10,'2024-02-19','2024-03-06','Activo'),(11,11,'2024-02-21','2024-03-08','Activo'),(12,12,'2024-02-23','2024-03-10','Activo'),(13,13,'2024-02-25','2024-03-12','Activo'),(14,14,'2024-02-27','2024-03-14','Activo'),(15,15,'2024-02-29','2024-03-16','Activo'),(16,16,'2024-03-02','2024-03-18','Activo'),(17,17,'2024-03-04','2024-03-20','Activo'),(18,18,'2024-03-06','2024-03-22','Activo'),(19,19,'2024-03-08','2024-03-24','Activo'),(20,20,'2024-03-10','2024-03-26','Activo');
+/*!40000 ALTER TABLE `tb_prestamos` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-02-28 19:10:07
